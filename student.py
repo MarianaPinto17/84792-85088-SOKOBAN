@@ -2,28 +2,38 @@ import asyncio
 import getpass
 import json
 import os
-
+import random
 import websockets
 from mapa import Map
+from consts import *
 
 # Next 4 lines are not needed for AI agents, please remove them from your code!
-import pygame
-
-pygame.init()
-program_icon = pygame.image.load("data/icon2.png")
-pygame.display.set_icon(program_icon)
-
 
 async def agent_loop(server_address="localhost:8000", agent_name="student"):
     async with websockets.connect(f"ws://{server_address}/player") as websocket:
 
         # Receive information about static game properties
         await websocket.send(json.dumps({"cmd": "join", "name": agent_name}))
+        #waits for the next mesage
+        msg = await websocket.recv()
+        #loads the mesage
+        game_properties = json.loads(msg)
 
-        # Next 3 lines are not needed for AI agent
-        SCREEN = pygame.display.set_mode((299, 123))
-        SPRITES = pygame.image.load("data/pad.png").convert_alpha()
-        SCREEN.blit(SPRITES, (0, 0))
+        mapa = Map(game_properties["map"])
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print(mapa)
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        print(mapa._map)
+        for x in mapa._map:
+            print(x)
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+        walls = []
+        for lin in range(len(mapa._map)):
+            for col in range(len(mapa._map[lin])):
+                if mapa._map[lin][col]==Tiles.WALL:
+                    walls.append([col,lin])
+        print(walls)
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
         while True:
             try:
@@ -38,39 +48,15 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                 else:
                     # we got a current map state update
                     state = update
-
-                # Next lines are only for the Human Agent, the key values are nonetheless the correct ones!
-                key = ""
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_UP:
-                            key = "w"
-                        elif event.key == pygame.K_LEFT:
-                            key = "a"
-                        elif event.key == pygame.K_DOWN:
-                            key = "s"
-                        elif event.key == pygame.K_RIGHT:
-                            key = "d"
-
-                        elif event.key == pygame.K_d:
-                            import pprint
-
-                            pprint.pprint(state)
-                            print(Map(f"levels/{state['level']}.xsb"))
-                        await websocket.send(
-                            json.dumps({"cmd": "key", "key": key})
-                        )  # send key command to server - you must implement this send in the AI agent
-                        break
+                await websocket.send(
+                    
+                    #random movements
+                    json.dumps({"cmd": "key", "key": random.choice('asdw')})
+                )  # send key command to server - you must implement this send in the AI agent
+                        
             except websockets.exceptions.ConnectionClosedOK:
                 print("Server has cleanly disconnected us")
                 return
-
-            # Next line is not needed for AI agent
-            pygame.display.flip()
-
 
 # DO NOT CHANGE THE LINES BELLOW
 # You can change the default values using the command line, example:

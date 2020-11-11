@@ -1,14 +1,12 @@
 
-#from math import *
+from math import *
 from node import Node
-#from const import *
+from const import *
 from abc import ABC, abstractmethod
 
 #returns the distance between two points
 def distance(orig,dest):
-    pass
-    #return dist(orig,dest)
-
+    return dist(orig,dest)
 
 class SearchDomain(ABC):
 

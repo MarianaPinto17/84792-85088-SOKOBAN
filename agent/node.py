@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self,position,parent,depth,cost,heuristic):
+    def __init__(self,position,parent,cost,heuristic):
         self.position = position
         self.parent = parent
         self.depth = self.parent.depth + 1 if self.parent != None else 0

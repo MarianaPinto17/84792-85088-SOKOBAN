@@ -6,7 +6,6 @@ class Direction(Enum):
     DOWN = "s"
     RIGHT = "d"
 
-
 StringToDir = {
     "w": Direction.UP,
     "a": Direction.LEFT,

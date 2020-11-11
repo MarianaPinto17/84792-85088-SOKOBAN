@@ -1,12 +1,13 @@
 
-from math import *
-from agent import Node
-from agent import const
+#from math import *
+from node import Node
+#from const import *
 from abc import ABC, abstractmethod
 
 #returns the distance between two points
 def distance(orig,dest):
-    return dist(orig,dest)
+    pass
+    #return dist(orig,dest)
 
 
 class SearchDomain(ABC):
@@ -52,25 +53,13 @@ class SearchProblem:
     def goal_test(self, state):
         return self.domain.satisfies(state,self.goal)
 
-# Nos de uma arvore de pesquisa
-class SearchNode:
-    def __init__(self,state,parent,cost=0): 
-        self.state = state
-        self.parent = parent
-        self.cost = cost
-        self.depth = self.parent.depth + 1 if self.parent != None else 0
-    def __str__(self):
-        return "no(" + str(self.state) + "," + str(self.parent) + ")"
-    def __repr__(self):
-        return str(self)
-
 # Arvores de pesquisa
 class SearchTree:
 
     # construtor
     def __init__(self,problem, strategy='astar'): 
         self.problem = problem
-        root = SearchNode(problem.initial, None)
+        root = Node(problem.initial, None)
         self.open_nodes = [root]
         self.strategy = strategy
         self.terminals = 0
@@ -107,7 +96,7 @@ class SearchTree:
             for a in self.problem.domain.actions(node.state): #  a = action
                 newstate = self.problem.domain.result(node.state,a)
                 if newstate not in self.get_path(node): #prevents loops
-                    newnode = SearchNode(newstate,node)
+                    newnode = Node(newstate,node)
                     newnode.cost = self.problem.domain.cost(node.state,a) + node.cost
                     newnode.heuristic = self.problem.domain.heuristic(newstate, self.problem.goal)
                     lnewnodes.append(newnode)

@@ -1,13 +1,11 @@
 class Node:
-    def __init__(self,position,parent,cost,heuristic):
-        self.position = position
-        self.parent = parent
-        self.depth = self.parent.depth + 1 if self.parent != None else 0
-        self.cost = cost
-        self.heuristic = heuristic
+    def __init__(self,position,symbol):
+        self.position = position #tuple
+        self.symbol = symbol #char
+        self.parent = None
+        self.g = 0
+        self.h = 0
+
+    def f(self):
+        return self.g + self.h
         
-    def __str__(self):
-        return "node(" + str(self.state) + "," + str(self.parent) + ")"
-    
-    def __repr__(self):
-        return str(self)

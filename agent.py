@@ -35,6 +35,18 @@ def deadlock_corner(self,box):
 
 def deadlock_wall(self,box):
     
+    (x,y) = box.position
+    
+    #Validation and macro atribution of the tiles
+    up = mapa.get_tile((x,y+1))
+    down = mapa.get_tile((x,y-1))
+    left = mapa.get_tile((x-1,y))
+    right = mapa.get_tile((x+1,y))
+    
+    #top wall
+    #bottom wall
+    #left wall
+    #right wall
 
     pass
 

@@ -1,11 +1,8 @@
 class Node:
-    def __init__(self,position,symbol):
+    def __init__(self,position,parent,heuristic,cost):
         self.position = position #tuple
-        self.symbol = symbol #char
         self.parent = None
-        self.g = 0
-        self.h = 0
-
-    def f(self):
-        return self.g + self.h
+        self.heuristic = heuristic
+        self.cost = cost
+        self.evalfunc = heuristic + cost
         

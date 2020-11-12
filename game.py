@@ -14,16 +14,10 @@ TIMEOUT = 3000
 GAME_SPEED = 10
 
 
-<<<<<<< HEAD
 def reduce_score(score):
     """Convert tuple into 1-dimension score."""
     moves, pushes, steps = score
     return moves + pushes + steps
-=======
-def reduce_score(puzzles, moves, pushes, steps, box_on_goal):
-    """Convert tuple into 1-dimension score."""
-    return 10000 * puzzles + 1000 * box_on_goal - 100 * pushes - steps
->>>>>>> upstream/master
 
 
 class Game:
@@ -31,10 +25,6 @@ class Game:
 
     def __init__(self, level=1, timeout=TIMEOUT, player=None):
         logger.info("Game(level=%s)", level)
-<<<<<<< HEAD
-=======
-        self.puzzles = 0 #puzzles completed
->>>>>>> upstream/master
         self.level = level
         if player:
             self._running = True
@@ -74,11 +64,8 @@ class Game:
     @property
     def score(self):
         """Calculus of the current score."""
-<<<<<<< HEAD
         return self._moves, self._pushes, self._total_steps + self._step
-=======
         return self.puzzles, self._moves, self._pushes, self._total_steps + self._step, self.map.on_goal
->>>>>>> upstream/master
 
     def stop(self):
         """Stop the game."""
@@ -88,17 +75,9 @@ class Game:
 
     def next_level(self, level):
         """Update all state variables to a new level."""
-<<<<<<< HEAD
         self._total_steps += self._step
         self._step = 0
         self._lastkeypress = ""
-=======
-        self.puzzles += 1
-        self._total_steps += self._step
-        self._step = 0
-        self._lastkeypress = ""
-        self._papertrail += "," 
->>>>>>> upstream/master
         self.level = level
         try:
             self.map = Map(f"levels/{level}.xsb")

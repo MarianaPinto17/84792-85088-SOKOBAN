@@ -51,20 +51,14 @@ class GameServer:
         """Update highscores, storing to file."""
         logger.debug("Save highscores")
         logger.info(
-<<<<<<< HEAD
             "FINAL SCORE <%s>: %s moves and %s pushes in %s steps",
-=======
             "FINAL SCORE <%s>: %s puzzles with %s moves and %s pushes in %s steps, currently %s boxes on goal",
->>>>>>> upstream/master
             self.current_player.name,
             *score,
         )
 
-<<<<<<< HEAD
         self._highscores.append((self.current_player.name, reduce_score(score),))
-=======
         self._highscores.append((self.current_player.name, reduce_score(*score),))
->>>>>>> upstream/master
         self._highscores = sorted(self._highscores, key=lambda s: s[1])[:MAX_HIGHSCORES]
 
         with open(HIGHSCORE_FILE, "w") as outfile:
@@ -157,11 +151,8 @@ class GameServer:
             finally:
                 try:
                     if self.grading:
-<<<<<<< HEAD
                         game_record["total_moves"], game_record["total_pushes"], game_record["total_steps"] = self.game.score
-=======
                         game_record["puzzles"], game_record["total_moves"], game_record["total_pushes"], game_record["total_steps"], game_record["box_on_goal"] = self.game.score
->>>>>>> upstream/master
                         game_record["papertrail"] = self.game.papertrail
                         game_record["level"] = self.game.level
                         requests.post(self.grading, json=game_record)
@@ -185,11 +176,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--grading-server",
         help="url of grading server",
-<<<<<<< HEAD
         default="http://sokoban-aulas.ws.atnog.av.it.pt/game",
-=======
         default="http://bomberman-aulas.ws.atnog.av.it.pt/game",
->>>>>>> upstream/master
     )
     args = parser.parse_args()
 

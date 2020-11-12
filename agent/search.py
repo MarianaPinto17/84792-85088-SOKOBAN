@@ -8,6 +8,11 @@ from abc import ABC, abstractmethod
 def distance(orig,dest):
     return dist(orig,dest)
 
+def astar(start,goal):
+    pass
+    #openNodes = []
+    
+'''
 class SearchDomain(ABC):
 
     # construtor
@@ -108,4 +113,4 @@ class SearchTree:
             self.open_nodes = sorted(self.open_nodes + lnewnodes, key = lambda node: node.heuristic + node.cost)
 
 
-
+'''

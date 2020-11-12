@@ -1,116 +1,62 @@
+from math import sqrt
+from node import *
+from consts import *
 
-from math import *
-from node import Node
-from const import *
-from abc import ABC, abstractmethod
+#distance tfrom start to goal
+def heuristic(start,goal):
+    #return(round(sqrt(pow((goal[0]-start[0]),2) + (pow((goal[1]-start[1]),2))))) #euclidiana
+    return(abs(start.position[0] - goal.position[0])+ abs(start.position[1] - goal.position[1])) #manhattan
 
-#returns the distance between two points
-def distance(orig,dest):
-    return dist(orig,dest)
+#A* algorithm
+def astar(map,start,goal):
 
-def astar(start,goal):
-    pass
-    #openNodes = []
+    #list of open and closed nodes (closed ones are the one that already have been visited)
+    open_nodes = []
+    closed_nodes = []
+
+    start_node = Node(start,None,0,0)
+    goal_node = Node(goal,None,0,0)
     
-'''
-class SearchDomain(ABC):
+    open_nodes.append(start_node)
 
-    # construtor
-    @abstractmethod
-    def __init__(self):
-        pass
+    while open_nodes != []:
+        #sort the open_node list from lowest to highest cost
+        open_nodes.sort()
+        current_node = open_nodes.pop(0)
+        closed_nodes.append(current_node)
 
-    # lista de accoes possiveis num estado
-    @abstractmethod
-    def actions(self, state):
-        pass
+        if current_node == goal_node:
+            path = []
+            while current_node != start_node:
+                path.append(current_node.position)
+            #return reversed path
+            return path [::-1]
 
-    # resultado de uma accao num estado, ou seja, o estado seguinte
-    @abstractmethod
-    def result(self, state, action):
-        pass
+        (x,y) = current_node.position
 
-    # custo de uma accao num estado
-    @abstractmethod
-    def cost(self, state, action):
-        pass
+        #get neighbors position
+        neighbors = [(x-1,y), (x+1, y), (x, y-1), (x, y+1)]
 
-    # custo estimado de chegar de um estado a outro
-    @abstractmethod
-    def heuristic(self, state, goal):
-        pass
+        for a in neighbors:
+            #get value from map
+            map_value = map.get(a)
 
-    # test if the given "goal" is satisfied in "state"
-    @abstractmethod
-    def satisfies(self, state, goal):
-        pass
-
-
-# Problemas concretos a resolver
-# dentro de um determinado dominio
-class SearchProblem:
-    def __init__(self, domain, initial, goal):
-        self.domain = domain
-        self.initial = initial
-        self.goal = goal
-    def goal_test(self, state):
-        return self.domain.satisfies(state,self.goal)
-
-# Arvores de pesquisa
-class SearchTree:
-
-    # construtor
-    def __init__(self,problem, strategy='astar'): 
-        self.problem = problem
-        root = Node(problem.initial, None)
-        self.open_nodes = [root]
-        self.strategy = strategy
-        self.terminals = 0
-        self.non_terminals = 0
-
-    # obter o caminho (sequencia de estados) da raiz ate um no
-    def get_path(self,node):
-        if node.parent == None:
-            return [node.state]
-        path = self.get_path(node.parent)
-        path += [node.state]
-        return(path)
-    
-    def length(self):
-        return self.solution.depth
-
-    @property
-    def avg_ramification(self):
-        return (self.terminals + self.non_terminals - 1) / self.non_terminals
-
-    # procurar a solucao
-    def search(self,limit=None):
-        while self.open_nodes != []:
-            node = self.open_nodes.pop(0)
-            self.non_terminals += 1
-            self.terminals = len(self.open_nodes)
-            if self.problem.goal_test(node.state): #check if solution
-                self.solution = node
-                self.cost = self.solution.cost
-                return self.get_path(node)
-            lnewnodes = [] #list of children nodes to expand
-            if limit != None and node.depth > limit: #check if node has correct depth
+            #if node is a wall finds another one
+            if(map_value == Tiles.WALL):
                 continue
-            for a in self.problem.domain.actions(node.state): #  a = action
-                newstate = self.problem.domain.result(node.state,a)
-                if newstate not in self.get_path(node): #prevents loops
-                    newnode = Node(newstate,node)
-                    newnode.cost = self.problem.domain.cost(node.state,a) + node.cost
-                    newnode.heuristic = self.problem.domain.heuristic(newstate, self.problem.goal)
-                    lnewnodes.append(newnode)
-            self.add_to_open(lnewnodes)
-            
-        return None
 
-    # juntar novos nos a lista de nos abertos de acordo com a estrategia
-    def add_to_open(self,lnewnodes):
-        if self.strategy == 'astar':
-            self.open_nodes = sorted(self.open_nodes + lnewnodes, key = lambda node: node.heuristic + node.cost)
+            neighbor = Node(a,current_node,heuristic(start,neighbor),heuristic(neighbor,goal))
+            neighbor.evalfunc = neighbor.cost + neighbor.heuristic
 
+            if(add_to_open(open_nodes,neighbor) == True):
+                open_nodes.append(neighbor)
 
-'''
+    #NO PATH FOUND :(
+    return None
+
+#Check if a neighbor should be added to open_nodes list
+def add_to_open(open_nodes,neighbor):
+    for node in open_nodes:
+        if(neighbor == node and neighbor.evalfunc >= node.evalfunc):
+            return False
+    return True

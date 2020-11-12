@@ -5,6 +5,7 @@ class Node:
         self.parent = None
         self.g = 0
         self.h = 0
+    
 
     def f(self):
         return self.g + self.h

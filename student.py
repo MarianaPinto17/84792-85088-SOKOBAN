@@ -3,37 +3,33 @@ import getpass
 import json
 import os
 import random
+from tree_search import *
+from sokosolver import *
+from state import *
 import websockets
 from mapa import Map
-from consts import *
 
-# Next 4 lines are not needed for AI agents, please remove them from your code!
+async def solver(puzzle, solution):
+    while True:
+        game_properties = await puzzle.get()
+        mapa = Map(game_properties["map"])
+        print(mapa)
 
-async def agent_loop(server_address="localhost:8000", agent_name="student"):
+        domain = Sokosolver(mapa)
+        initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]),mapa.keeper)
+        problem = SearchProblem(domain , initstate,mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]))
+        st =SearchTree(problem,"depth")
+        lista = await (st.search())
+        print(f"st.search{lista}")
+        keys = ""
+        #keys = "sawdddsawaassdwawdwwasdssddwasaww"
+        await solution.put(keys)
+
+async def agent_loop(puzzle, solution, server_address="localhost:8000", agent_name="student"):
     async with websockets.connect(f"ws://{server_address}/player") as websocket:
 
         # Receive information about static game properties
         await websocket.send(json.dumps({"cmd": "join", "name": agent_name}))
-        #waits for the next mesage
-        msg = await websocket.recv()
-        #loads the mesage
-        game_properties = json.loads(msg)
-
-        mapa = Map(game_properties["map"])
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print(mapa)
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print(mapa._map)
-        for x in mapa._map:
-            print(x)
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        walls = []
-        for lin in range(len(mapa._map)):
-            for col in range(len(mapa._map[lin])):
-                if mapa._map[lin][col]==Tiles.WALL:
-                    walls.append([col,lin])
-        print(walls)
-        print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
         while True:
             try:
@@ -44,16 +40,21 @@ async def agent_loop(server_address="localhost:8000", agent_name="student"):
                 if "map" in update:
                     # we got a new level
                     game_properties = update
-                    mapa = Map(update["map"])
-                else:
-                    # we got a current map state update
-                    state = update
+                    keys = ""
+                    await puzzle.put(game_properties)
+
+                if not solution.empty():
+                    keys = await solution.get()
+
+                key = ""
+                if len(keys):  # we got a solution!
+                    key = keys[0]
+                    keys = keys[1:]
+
                 await websocket.send(
-                    
-                    #random movements
-                    json.dumps({"cmd": "key", "key": random.choice('asdw')})
-                )  # send key command to server - you must implement this send in the AI agent
-                        
+                    json.dumps({"cmd": "key", "key": key})
+                )
+
             except websockets.exceptions.ConnectionClosedOK:
                 print("Server has cleanly disconnected us")
                 return
@@ -65,4 +66,12 @@ loop = asyncio.get_event_loop()
 SERVER = os.environ.get("SERVER", "localhost")
 PORT = os.environ.get("PORT", "8000")
 NAME = os.environ.get("NAME", getpass.getuser())
-loop.run_until_complete(agent_loop(f"{SERVER}:{PORT}", NAME))
+
+puzzle = asyncio.Queue(loop=loop)
+solution = asyncio.Queue(loop=loop)
+
+net_task = loop.create_task(agent_loop(puzzle, solution, f"{SERVER}:{PORT}", NAME))
+solver_task = loop.create_task(solver(puzzle, solution))
+
+loop.run_until_complete(asyncio.gather(net_task, solver_task))
+loop.close()

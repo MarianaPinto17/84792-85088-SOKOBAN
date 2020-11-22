@@ -35,8 +35,6 @@ class Sokosolver(SearchDomain):
         new_state = State(state.boxes,action)
         #new_state.keeper = action
         return new_state
-        
-
 
     # custo de uma accao num estado
     def cost(self, state, action):

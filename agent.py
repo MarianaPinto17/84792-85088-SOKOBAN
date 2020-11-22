@@ -48,8 +48,44 @@ def deadlock_wall(self,box):
     #right wall
     pass
 
+def translate(self,solution):#translates the movements of the keeper to a wasd list
+    res = []
+    for x in solution:
+        parent = x.parent
+        m = parent.location - x.location
+        if m == (0,1):
+            res.append('w')
+        elif m == (0,-1):
+            res.append('s')
+        elif m == (1,0):
+            res.append('d')
+        elif m == (-1,0):
+            res.append('a')
+    return res
 
-#def 
+def move(self,box,movement):#checks if the keeper has space to move
+     #use breath to go to the position .... [moves to pos] + move eg: from up, left => right,down + left
+    (x,y) = box.position
+    
+    #Validation and macro atribution of the tiles
+    up = mapa.get_tile((x,y+1))
+    down = mapa.get_tile((x,y-1))
+    left = mapa.get_tile((x-1,y))
+    right = mapa.get_tile((x+1,y))
+
+    #Assuming movment is in the form of (x,y)
+    if movement == (0,1):
+        res = search(down)
+    elif movement == (0,-1):
+        res = search(up)
+    elif movement == (1,0):
+        res = search(left)
+    elif movement == (-1,0):
+        res = search(right)
+    
+    return res #if res is none there is no way to move the box in that way
+    
+
 
 
     

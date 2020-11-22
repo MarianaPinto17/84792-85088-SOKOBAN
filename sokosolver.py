@@ -25,7 +25,7 @@ class Sokosolver(SearchDomain):
             if x not in self.walls:
                 pstate.append(x)
         
-        print(f"Next states: {pstate}")
+        #print(f"Next states: {pstate}")
 
         return pstate
             
@@ -33,7 +33,20 @@ class Sokosolver(SearchDomain):
     # resultado de uma accao num estado, ou seja, o estado seguinte
     def result(self, state, action):
         new_state = State(state.boxes,action)
-        #new_state.keeper = action
+
+        if action in state.boxes: #se a caixa está em state.boxes
+            print(f"I'm pusing a box")
+            (y1,x1) = state.keeper
+            (y2,x2) = action
+            yres = y2 + (y1 - y2)
+            xres = x2 + (x1 - x2)
+            index = state.boxes.index(action)
+            state.boxes[index] = (yres,xres)
+            new_state = State(state.boxes,action)
+            
+            print(f"oldbox{state.boxes}")
+            print(f"newbox{new_state.boxes}")
+
         return new_state
         
 
@@ -48,7 +61,7 @@ class Sokosolver(SearchDomain):
 
     # test if the given "goal" is satisfied in "state"
     def satisfies(self, state, goal):
-        if set(state.boxes).issubset(goal):
+        if set(state.boxes)== set(goal):
             return True
         else:
             return False

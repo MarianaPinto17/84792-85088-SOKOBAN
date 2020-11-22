@@ -107,6 +107,7 @@ class SearchTree:
             self.non_terminals += 1
             self.terminals = len(self.open_nodes)
             if self.problem.goal_test(node.state): #check if solution
+                print("solution")
                 self.solution = node
                 self.cost = self.solution.cost
                 return self.get_path(node)
@@ -117,7 +118,7 @@ class SearchTree:
                 newstate = self.problem.domain.result(node.state,a)
                 
                 if newstate not in self.get_path(node): #prevents loops
-                    print(f"newstate {newstate}")
+                    #print(f"newstate {newstate}")
                     newnode = SearchNode(newstate,node)
                     newnode.cost = self.problem.domain.cost(node.state,a) + node.cost
                     newnode.heuristic = self.problem.domain.heuristic(newstate, self.problem.goal)

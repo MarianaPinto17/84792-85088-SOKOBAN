@@ -17,7 +17,7 @@ def deadlock_corner(self,box):
     if((up in [Tiles.WALL] or up in [Tiles.BOX]) and left in [Tiles.WALL]): 
         return True
 
-    #checling top right
+    #checking top right
     elif(up in [Tiles.WALL] and right in [Tiles.WALL]):
         return True
 

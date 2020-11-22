@@ -35,7 +35,7 @@ class Sokosolver(SearchDomain):
         new_state = State(state.boxes,action)
 
         if action in state.boxes: #se a caixa está em state.boxes
-            print(f"I'm pusing a box")
+            print(f"I'm pushing a box")
             
             (y1,x1) = state.keeper
             (y2,x2) = action

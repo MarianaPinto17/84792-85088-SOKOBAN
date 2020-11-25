@@ -104,27 +104,18 @@ class SearchTree:
         while self.open_nodes != []:
             await asyncio.sleep(0)
             node = self.open_nodes.pop(0)
-            self.non_terminals += 1
-            self.terminals = len(self.open_nodes)
-            if self.problem.goal_test(node.state): #check if solution
-                print("solution")
+            if self.problem.goal_test(node.state):
+                self.terminals = len(self.open_nodes)+1
                 self.solution = node
-                self.cost = self.solution.cost
                 return self.get_path(node)
-            lnewnodes = [] #list of children nodes to expand
-            if limit != None and node.depth > limit: #check if node has correct depth
-                continue
-            for a in self.problem.domain.actions(node.state): #  a = action
+            self.non_terminals+=1
+            node.children = []
+            for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                
-                if newstate not in self.get_path(node): #prevents loops
-                    #print(f"newstate {newstate}")
+                if newstate not in self.get_path(node):
                     newnode = SearchNode(newstate,node)
-                    newnode.cost = self.problem.domain.cost(node.state,a) + node.cost
-                    newnode.heuristic = self.problem.domain.heuristic(newstate, self.problem.goal)
-                    lnewnodes.append(newnode)
-            self.add_to_open(lnewnodes)
-            
+                    node.children.append(newnode)
+            self.add_to_open(node.children)
         return None
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia

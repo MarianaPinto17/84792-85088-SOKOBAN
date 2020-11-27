@@ -46,8 +46,7 @@ class Sokosolver(SearchDomain):
             index = auxlist.index(action)
             auxlist[index] = (yres,xres)
 
-            #print(f"oldbox{state.boxes}")
-            #print(f"newbox{new_state.boxes}")
+            print(new_state)
 
         return new_state
 

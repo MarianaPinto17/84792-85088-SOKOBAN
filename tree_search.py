@@ -90,7 +90,6 @@ class SearchTree:
             return [node.state]
         path = self.get_path(node.parent)
         path += [node.state]
-        print(path)
         return(path)
     
     def length(self):
@@ -105,9 +104,10 @@ class SearchTree:
         while self.open_nodes != []:
             await asyncio.sleep(0)
             node = self.open_nodes.pop(0)
-            if self.problem.goal_test(node.state):
+            if self.problem.goal_test(node.state): #solution detected
                 self.terminals = len(self.open_nodes)+1
                 self.solution = node
+                print("==================WE HAVE A SOLUTION==================")
                 return self.get_path(node)
             self.non_terminals+=1
             node.children = []
@@ -117,7 +117,8 @@ class SearchTree:
                     newnode = SearchNode(newstate,node)
                     node.children.append(newnode)
             self.add_to_open(node.children)
-        return None
+        print("!!!NO SOLUTION!!!")
+        return None #no solution deteced
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia
     def add_to_open(self,lnewnodes):

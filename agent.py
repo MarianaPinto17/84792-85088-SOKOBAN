@@ -62,7 +62,7 @@ def translate(self,solution):#translates the movements of the keeper to a wasd l
         elif m == (-1,0):
             res.append('a')
     return res
-
+'''
 def move(self,box,movement):#checks if the keeper has space to move
      #use breath to go to the position .... [moves to pos] + move eg: from up, left => right,down + left
     (x,y) = box.position
@@ -84,7 +84,7 @@ def move(self,box,movement):#checks if the keeper has space to move
         res = search(right)
     
     return res #if res is none there is no way to move the box in that way
-    
+  '''  
 
 
 

@@ -2,6 +2,7 @@ from tree_search import *
 from mapa import Map
 from consts import Tiles 
 from state import State
+from translation import translate
 
 class Sokosolver(SearchDomain):
     def __init__ (self,mapa):
@@ -35,7 +36,7 @@ class Sokosolver(SearchDomain):
         new_state = State(state.boxes,action)
 
         if action in state.boxes: #se a caixa está em state.boxes
-            print(f"I'm pushing a box")
+            #print(f"I'm pushing a box")
             
             (y1,x1) = state.keeper
             (y2,x2) = action
@@ -44,10 +45,9 @@ class Sokosolver(SearchDomain):
             auxlist = state.boxes
             index = auxlist.index(action)
             auxlist[index] = (yres,xres)
-            new_state = State(auxlist,action)
-            
-            print(f"oldbox{state.boxes}")
-            print(f"newbox{new_state.boxes}")
+
+            #print(f"oldbox{state.boxes}")
+            #print(f"newbox{new_state.boxes}")
 
         return new_state
 

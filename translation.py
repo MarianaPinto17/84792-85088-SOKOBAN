@@ -17,4 +17,5 @@ def translate(self,solution):#translates the movements of the keeper to a wasd l
                 res.append('d')
             elif m == (-1,0):
                 res.append('a')
-        return res
+    
+    return res

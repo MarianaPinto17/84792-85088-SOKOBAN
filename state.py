@@ -9,3 +9,11 @@ class State():
 
     def __repr__ (self):
         return str(self)
+
+    def __eq__(self,other):
+        if not isinstance(other,State):
+            return NotImplemented
+        return self.boxes == other.boxes and self.keeper == other.keeper
+
+    def hash(self):
+        return hash((self.boxes, self.keeper))

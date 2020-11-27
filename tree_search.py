@@ -112,6 +112,8 @@ class SearchTree:
             node.children = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
+                print(newstate)
+                print(self.get_path(node))
                 if newstate not in self.get_path(node):
                     newnode = SearchNode(newstate,node)
                     node.children.append(newnode)

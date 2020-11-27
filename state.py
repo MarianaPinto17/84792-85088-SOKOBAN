@@ -6,3 +6,6 @@ class State():
 
     def __str__(self):
         return f"Caixas: {self.boxes} | keeper: {self.keeper}"
+
+        def __repr__ (self):
+            return str(self)

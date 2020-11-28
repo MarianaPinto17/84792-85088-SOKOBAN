@@ -21,8 +21,9 @@ class Sokosolver(SearchDomain):
         neighbor = [up,down,left,right]
 
         pstate = [] #possible states
-
+        
         for x in neighbor:
+            #se não é parede o keeper não vai para lá
             if x not in self.walls:
                 pstate.append(x)
         
@@ -30,25 +31,31 @@ class Sokosolver(SearchDomain):
 
         return pstate
             
-
+    #PROBLEMA É AQUI!!!!!!!!!!!!
     # resultado de uma accao num estado, ou seja, o estado seguinte
     def result(self, state, action):
         new_state = State(state.boxes,action)
-
+        # if action is go to box I push the box
         if action in state.boxes: #se a caixa está em state.boxes
             #print(f"I'm pushing a box")
-            
-            (y1,x1) = state.keeper
-            (y2,x2) = action
-            yres = y2 + (y1 - y2)
+            #keeper coordinates
+            (x1,y1) = state.keeper
+            #action coordinates
+            (x2,y2) = action
+            #calculate the new coordinates of the box
             xres = x2 + (x1 - x2)
-            auxlist = state.boxes
-            index = auxlist.index(action)
-            auxlist[index] = (yres,xres)
-
-            print(new_state)
+            yres = y2 + (y1 - y2)
+            if (xres,yres) not in self.boxes:
+                if (xres,yres) not in self.walls:
+                    auxlist = state.boxes
+                    index = auxlist.index(action)
+                    auxlist[index] = (xres,yres)
+        
+            #print(f"oldbox{state.boxes}")
+            #print(f"newbox{new_state.boxes}")
 
         return new_state
+
 
     # custo de uma accao num estado
     def cost(self, state, action):

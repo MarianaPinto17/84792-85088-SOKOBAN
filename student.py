@@ -21,6 +21,8 @@ async def solver(puzzle, solution):
         problem = SearchProblem(domain , initstate,mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]))
         st =SearchTree(problem,"depth")
         lista = await (st.search())
+        for elem in lista:
+            print(elem)
         keys = translate(lista)
         #keys = "sawdddsawaassdwawdwwasdssddwasaww"
         await solution.put(keys)

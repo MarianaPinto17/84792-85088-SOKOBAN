@@ -6,9 +6,10 @@ import random
 from tree_search import *
 from sokosolver import *
 from state import *
+from agent import translate
 import websockets
 from mapa import Map
-from translation import translate
+from agent import translate
 
 async def solver(puzzle, solution):
     while True:
@@ -20,10 +21,7 @@ async def solver(puzzle, solution):
         problem = SearchProblem(domain , initstate,mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]))
         st =SearchTree(problem,"depth")
         lista = await (st.search())
-        print (lista)
-        #print(translate(lista))
-        #print(f"st.search{lista}")
-        keys = ""
+        keys = translate(lista)
         #keys = "sawdddsawaassdwawdwwasdssddwasaww"
         await solution.put(keys)
 

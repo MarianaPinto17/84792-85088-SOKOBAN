@@ -48,19 +48,22 @@ def deadlock_wall(self,box):
     #right wall
     pass
 
-def translate(self,solution):#translates the movements of the keeper to a wasd list
+def translate(solution):#translates the movements of the keeper to a wasd list
     res = []
-    for x in solution:
-        parent = x.parent
-        m = parent.location - x.location
-        if m == (0,1):
-            res.append('w')
-        elif m == (0,-1):
-            res.append('s')
-        elif m == (1,0):
-            res.append('d')
-        elif m == (-1,0):
-            res.append('a')
+    
+    for x in range(1,len(solution)-1):
+        xaxis = solution[x].keeper[1] - solution[x-1].keeper[1]
+        yaxis = solution[x].keeper[0] - solution[x-1].keeper[0]
+        
+        if xaxis == -1
+            res += 'A'
+        if xaxis == 1
+            res += 'D'
+        if yaxis == 1
+            res += 'W'
+        if yaxis == -1
+            res += 'S'
+
     return res
 '''
 def move(self,box,movement):#checks if the keeper has space to move

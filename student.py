@@ -25,6 +25,7 @@ async def solver(puzzle, solution):
             print(elem)
         keys = translate(lista)
         #keys = "sawdddsawaassdwawdwwasdssddwasaww"
+        print(keys)
         await solution.put(keys)
 
 async def agent_loop(puzzle, solution, server_address="localhost:8000", agent_name="student"):

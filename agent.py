@@ -50,20 +50,19 @@ def deadlock_wall(self,box):
 
 def translate(solution):#translates the movements of the keeper to a wasd list
     res = []
-    
+    print(solution)
     for x in range(1,len(solution)-1):
-        xaxis = solution[x].keeper[0] - solution[x-1].keeper[0]
-        yaxis = solution[x].keeper[1] - solution[x-1].keeper[1]
+        yaxis = solution[x].keeper[0] - solution[x-1].keeper[0]
+        xaxis = solution[x].keeper[1] - solution[x-1].keeper[1]
         
         if xaxis == -1:
             res += 'a'
         if xaxis == 1:
             res += 'd'
         if yaxis == 1:
-            res += 'w'
-        if yaxis == -1:
             res += 's'
-        print(res)
+        if yaxis == -1:
+            res += 'w'
     return res
 '''
 def move(self,box,movement):#checks if the keeper has space to move

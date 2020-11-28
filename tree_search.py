@@ -71,6 +71,13 @@ class SearchNode:
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
         return str(self)
+        
+    def in_parent(self,state):
+        if self.state == state:
+            return True
+        if self.parent == None:
+            return False
+        return self.parent.in_parent(state)
 
 # Arvores de pesquisa
 class SearchTree:
@@ -113,8 +120,8 @@ class SearchTree:
             node.children = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                if newstate not in self.get_path(node):
-                    newnode = SearchNode(newstate,node)
+                newnode = SearchNode(newstate,node)
+                if not node.in_parent(newstate) and (limit is None or newnode.pdeth <= limit):
                     node.children.append(newnode)
             self.add_to_open(node.children)
         print("!!!NO SOLUTION!!!")

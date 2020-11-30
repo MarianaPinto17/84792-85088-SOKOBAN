@@ -100,7 +100,7 @@ class Sokosolver(SearchDomain):
     '''
         new_state = State(state.boxes,action)
         # if action is go to box I push the box
-        if action in state.boxes: #se a caixa está em state.boxes
+        if action in state.boxes: #se a açao está em state.boxes
             #print(f"I'm pushing a box")
             #keeper coordinates
             (x1,y1) = state.keeper
@@ -117,7 +117,13 @@ class Sokosolver(SearchDomain):
         
             #print(f"oldbox{state.boxes}")
             print(f"newbox{new_state.boxes}")
+<<<<<<< HEAD
     '''
+=======
+
+        return new_state
+
+>>>>>>> b36d3c8a8c9ed6d350de52b5303cf344adfa35e3
 
     # custo de uma accao num estado
     def cost(self, state, action):

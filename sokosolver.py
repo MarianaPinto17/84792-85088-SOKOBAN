@@ -14,8 +14,8 @@ class Sokosolver(SearchDomain):
     def actions(self, state):
         
         #keeper neighborhood
-        up = (state.keeper[0] ,state.keeper[1] + 1)
-        down = (state.keeper[0], state.keeper[1] - 1)
+        up = (state.keeper[0] ,state.keeper[1] - 1)
+        down = (state.keeper[0], state.keeper[1] + 1)
         left = (state.keeper[0] - 1 , state.keeper[1])
         right = (state.keeper[0] + 1, state.keeper[1])
         neighbor = [up,down,left,right]
@@ -43,8 +43,8 @@ class Sokosolver(SearchDomain):
             #action coordinates
             (x2,y2) = action
             #calculate the new coordinates of the box
-            xres = x2 + (x1 - x2)
-            yres = y2 + (y1 - y2)
+            xres = x2 + (x2 - x1)
+            yres = y2 + (y2 - y1)
             #if (xres,yres) not in self.boxes:
             if (xres,yres) not in self.walls:
                 auxlist = state.boxes

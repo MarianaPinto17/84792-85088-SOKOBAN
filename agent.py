@@ -52,8 +52,8 @@ def translate(solution):#translates the movements of the keeper to a wasd list
     res = []
     print(solution)
     for x in range(1,len(solution)-1):
-        yaxis = solution[x].keeper[0] - solution[x-1].keeper[0]
-        xaxis = solution[x].keeper[1] - solution[x-1].keeper[1]
+        yaxis = solution[x].keeper[1] - solution[x-1].keeper[1]
+        xaxis = solution[x].keeper[0] - solution[x-1].keeper[0]
         
         if xaxis == -1:
             res += 'a'

@@ -122,11 +122,11 @@ class SearchTree:
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
                 if newstate != None:
-                #if not node.in_parent(newstate) and (limit is None or newnode.depth <= limit):
-                    if newstate not in self.get_path(node):
-                        newnode = SearchNode(newstate,node)
-                        lnewnodes.append(newnode)
-                        #node.children.append(newnode)
+                    if not node.in_parent(newstate) and (limit is None or newnode.depth <= limit):
+                        if newstate not in self.get_path(node):
+                            newnode = SearchNode(newstate,node)
+                            lnewnodes.append(newnode)
+                            #node.children.append(newnode)
             self.add_to_open(lnewnodes)
         print("!!!NO SOLUTION!!!")
         return None #no solution deteced

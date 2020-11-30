@@ -18,8 +18,8 @@ async def solver(puzzle, solution):
         print(mapa)
         domain = Sokosolver(mapa)
         initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]),mapa.keeper)
-        problem = SearchProblem(domain , initstate,mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]))
-        st = SearchTree(problem,"depth")
+        problem = SearchProblem(domain , initstate, mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]))
+        st = SearchTree(problem,"breadth")
         lista = await (st.search())
         #for elem in lista:
          #   print(elem)

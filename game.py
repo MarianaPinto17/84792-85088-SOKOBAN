@@ -11,6 +11,7 @@ logger.setLevel(logging.DEBUG)
 
 INITIAL_SCORE = 0
 TIMEOUT = 3000
+
 GAME_SPEED = 10
 
 

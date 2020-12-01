@@ -1,5 +1,6 @@
 todos_deadlocks = set()
 
+#deadlock de canto
 def deadlock_corner(box,obstacles):
     #calculate the neighbors of the next state box
     global todos_deadlocks
@@ -25,3 +26,23 @@ def deadlock_corner(box,obstacles):
         return True
     else:
         return False 
+
+#deadlock de duas caixas sem conseguir mexer
+def deadlock_box(box,allboxes,obstacles):
+
+    up = (box[0] ,box[1] - 1)
+    down = (box[0], box[1] + 1)
+    left = (box[0] - 1 , box[1])
+    right = (box[0] + 1, box[1])
+
+    for boxes in allboxes:
+        if(up in obstacles and left in boxes or right in boxes):
+            return True
+        if(down in obstacles and left in boxes or right in boxes):
+            return True
+        if(left in obstacles and up in boxes or down in boxes):
+            return True
+        if(right in obstacles and up in boxes or down in boxes):
+            return True
+        else:
+            return False

@@ -46,10 +46,13 @@ class Sokosolver(SearchDomain):
             yres = y2 + (y2 - y1)
             if (xres,yres) not in self.walls and (xres,yres) not in state.boxes:#prevents pushing into walls and boxes
                 if (xres,yres) in self.goals or not deadlock_corner((xres,yres),self.walls): #prevents corner deadlocks
-                    auxlist = state.boxes[:]
-                    index = auxlist.index(next_move)
-                    auxlist[index] = (xres,yres)
-                    new_state = State(auxlist,next_move)
+                    if not deadlock_box((xres,yres),self.boxes,self.walls):
+                        auxlist = state.boxes[:]
+                        index = auxlist.index(next_move)
+                        auxlist[index] = (xres,yres)
+                        new_state = State(auxlist,next_move)
+                    else:
+                        return None
                 else:
                     return None
             else:

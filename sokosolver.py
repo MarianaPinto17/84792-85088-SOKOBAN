@@ -3,6 +3,7 @@ from mapa import Map
 from consts import Tiles 
 from state import State
 from translation import translate
+from deadlock import deadlock_corner
 import copy
 class Sokosolver(SearchDomain):
     def __init__ (self,mapa):
@@ -31,15 +32,12 @@ class Sokosolver(SearchDomain):
 
         return pstate
     
-    #PROBLEMA É AQUI!!!!!!!!!!!!
     # resultado de uma accao num estado, ou seja, o estado seguinte
     def result(self, state, action):
 
         new_state = State(state.boxes,action)
-        #print(f"oldkeeper:{state.keeper} | newkeeper:{new_state.keeper}")
         # if action is go to box I push the box
         if action in state.boxes: #se a açao está em state.boxes
-            #print(f"I'm pushing a box")
             #keeper coordinates
             (x1,y1) = state.keeper
             #action coordinates
@@ -47,22 +45,18 @@ class Sokosolver(SearchDomain):
             #calculate the new coordinates of the box
             xres = x2 + (x2 - x1)
             yres = y2 + (y2 - y1)
-            #if (xres,yres) not in self.boxes:
-            if (xres,yres) not in self.walls:
-                auxlist = state.boxes[:]
-                index = auxlist.index(action)
-                auxlist[index] = (xres,yres)
-                new_state = State(auxlist,action)
-                print("=========BOX=========")
-                print(f"oldbox: {state.boxes} | newbox:{new_state.boxes}")
-                print("=====================")
+            
+            if (xres,yres) not in self.walls and (xres,yres) not in self.boxes:#prevents pushing into walls and boxes
+                if deadlock_corner((xres,yres),self.walls) or (xres,yres) in self.goals: #prevents corner deadlocks
+                    auxlist = state.boxes[:]
+                    index = auxlist.index(action)
+                    auxlist[index] = (xres,yres)
+                    new_state = State(auxlist,action)
+                else:
+                    return None
             else:
                 return None
         
-            #print(f"oldbox{state.boxes}")
-        
-        
-
         return new_state
 
     # custo de uma accao num estado

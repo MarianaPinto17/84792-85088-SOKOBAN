@@ -17,7 +17,7 @@ async def solver(puzzle, solution):
         mapa = Map(game_properties["map"])
         print(mapa)
         domain = Sokosolver(mapa)
-        initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]),mapa.keeper)
+        initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]),mapa.keeper)
         problem = SearchProblem(domain , initstate, mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]))
         st = SearchTree(problem,"breadth")
         lista = await (st.search())

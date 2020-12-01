@@ -14,6 +14,7 @@
 
 from abc import ABC, abstractmethod
 import asyncio
+from deadlock import *
 # Dominios de pesquisa
 # Permitem calcular
 # as accoes possiveis em cada estado, etc
@@ -129,6 +130,7 @@ class SearchTree:
                             #node.children.append(newnode)
             self.add_to_open(lnewnodes)
         print("!!!NO SOLUTION!!!")
+        print(todos_deadlocks)
         return None #no solution deteced
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia

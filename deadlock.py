@@ -1,21 +1,27 @@
+todos_deadlocks = set()
 
-def deadlock_corner(box,obestacales):
+def deadlock_corner(box,obstacles):
     #calculate the neighbors of the next state box
+    global todos_deadlocks
     up = (box[0] ,box[1] - 1)
     down = (box[0], box[1] + 1)
     left = (box[0] - 1 , box[1])
     right = (box[0] + 1, box[1])
-    if(up in obestacales and left in obestacales):
+    if(up in obstacles and left in obstacles):
+        todos_deadlocks.add(box)
         print(up,left)
-        return False
-    elif(left in obestacales and down in obestacales):
+        return True
+    elif(left in obstacles and down in obstacles):
+        todos_deadlocks.add(box)
         print(left,down)
-        return False
-    elif(down in obestacales and right in obestacales):
+        return True
+    elif(down in obstacles and right in obstacles):
+        todos_deadlocks.add(box)
         print(down,right)
-        return False
-    elif(right in obestacales and up in obestacales):
+        return True
+    elif(right in obstacles and up in obstacles):
+        todos_deadlocks.add(box)
         print(right,up)
-        return False
+        return True
     else:
-        return True 
+        return False 

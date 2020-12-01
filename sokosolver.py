@@ -6,7 +6,7 @@ from translation import translate
 import copy
 class Sokosolver(SearchDomain):
     def __init__ (self,mapa):
-        self.goals = mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL])
+        self.goals = mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL])
         self.boxes = mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL])
         self.keeper = mapa.keeper
         self.walls = mapa.filter_tiles([Tiles.WALL])
@@ -48,7 +48,7 @@ class Sokosolver(SearchDomain):
             xres = x2 + (x2 - x1)
             yres = y2 + (y2 - y1)
             #if (xres,yres) not in self.boxes:
-            if (xres,yres) not in self.walls:
+            if ((xres,yres) not in self.walls and (xres,yres) not in self.boxes):
                 auxlist = state.boxes[:]
                 index = auxlist.index(action)
                 auxlist[index] = (xres,yres)
@@ -56,8 +56,9 @@ class Sokosolver(SearchDomain):
                 print("=========BOX=========")
                 print(f"oldbox: {state.boxes} | newbox:{new_state.boxes}")
                 print("=====================")
-            else:
-                return None
+            else:    
+                return None           
+                print("=====================")
         
             #print(f"oldbox{state.boxes}")
         

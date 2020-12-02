@@ -116,6 +116,8 @@ class SearchTree:
                 self.terminals = len(self.open_nodes)+1
                 self.solution = node
                 print("==================WE HAVE A SOLUTION==================")
+                print(todos_cantos)
+                todos_cantos.clear()
                 return self.get_path(node)
             self.non_terminals+=1
             #node.children = []
@@ -130,7 +132,7 @@ class SearchTree:
                             #node.children.append(newnode)
             self.add_to_open(lnewnodes)
         print("!!!NO SOLUTION!!!")
-        print(todos_deadlocks)
+        print(todos_cantos)
         return None #no solution deteced
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia

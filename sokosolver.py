@@ -44,15 +44,18 @@ class Sokosolver(SearchDomain):
             #calculate the new coordinates of the box
             xres = x2 + (x2 - x1)
             yres = y2 + (y2 - y1)
-            if (xres,yres) not in self.walls and (xres,yres) not in state.boxes:#prevents pushing into walls and boxes
-                if (xres,yres) in self.goals or not deadlock_corner((xres,yres),self.walls): #prevents corner deadlocks
-                    if not deadlock_box((xres,yres),self.boxes,self.walls):
-                        auxlist = state.boxes[:]
-                        index = auxlist.index(next_move)
-                        auxlist[index] = (xres,yres)
-                        new_state = State(auxlist,next_move)
+            if (xres,yres) in self.goals or not deadlock_corner((xres,yres),self.walls): #prevents corner deadlocks
+                if (xres,yres) not in self.walls and (xres,yres) not in state.boxes:#prevents pushing into walls and boxes
+                    if deadlock_boxnotgoal((xres,yres),self.goals,self.walls): #prevents corner deadlocks
+                        if not deadlock_box((xres,yres),self.boxes,self.walls):
+                            auxlist = state.boxes[:]
+                            index = auxlist.index(next_move)
+                            auxlist[index] = (xres,yres)
+                            new_state = State(auxlist,next_move)
+                        else:
+                            return None
                     else:
-                        return None
+                        return None    
                 else:
                     return None
             else:

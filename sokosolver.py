@@ -19,16 +19,13 @@ class Sokosolver(SearchDomain):
         down = (state.keeper[0], state.keeper[1] + 1)
         left = (state.keeper[0] - 1 , state.keeper[1])
         right = (state.keeper[0] + 1, state.keeper[1])
-        neighbor = [up,down,left,right]
+        neighbor = {up,down,left,right}
 
-        pstate = [] #possible states
+        pstate = set() #possible states
         
-        for x in neighbor:
-            #se não é parede o keeper não vai para lá
+        for x in neighbor: #check if keeper is going into a wall
             if x not in self.walls:
-                pstate.append(x)
-        
-        #print(f"Next states: {pstate}")
+                pstate.add(x)
 
         return pstate
     
@@ -47,15 +44,13 @@ class Sokosolver(SearchDomain):
             if (xres,yres) in self.goals or not deadlock_corner((xres,yres),self.walls): #prevents corner deadlocks
                 if (xres,yres) not in self.walls and (xres,yres) not in state.boxes:#prevents pushing into walls and boxes
                     #if deadlock_boxnotgoal((xres,yres),self.goals,self.walls): #prevents corner deadlocks
-                    if not deadlock_box((xres,yres),self.boxes,self.walls):
-                        auxlist = state.boxes[:]
-                        index = auxlist.index(next_move)
-                        auxlist[index] = (xres,yres)
-                        new_state = State(auxlist,next_move)
-                       #else:
-                        #    return None
-                    else:
-                        return None    
+                    #if not deadlock_box((xres,yres),self.boxes,self.walls):
+                    auxlist = state.boxes[:]
+                    index = auxlist.index(next_move)
+                    auxlist[index] = (xres,yres)
+                    new_state = State(auxlist,next_move)
+                    #else:
+                        #return None    
                 else:
                     return None
             else:

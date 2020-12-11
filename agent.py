@@ -1,8 +1,6 @@
 from mapa import *
 from tree_search import SearchNode
 
-def deadlock_corner(self,box):
-    pass
 
 def translate(solution):#translates the movements of the keeper to a wasd list
     res = []

@@ -43,14 +43,10 @@ class Sokosolver(SearchDomain):
             yres = y2 + (y2 - y1)
             if (xres,yres) in self.goals or not deadlock_corner((xres,yres),self.walls): #prevents corner deadlocks
                 if (xres,yres) not in self.walls and (xres,yres) not in state.boxes:#prevents pushing into walls and boxes
-                    #if deadlock_boxnotgoal((xres,yres),self.goals,self.walls): #prevents corner deadlocks
-                    #if not deadlock_box((xres,yres),self.boxes,self.walls):
                     auxlist = state.boxes[:]
                     index = auxlist.index(next_move)
                     auxlist[index] = (xres,yres)
-                    new_state = State(auxlist,next_move)
-                    #else:
-                        #return None    
+                    new_state = State(auxlist,next_move)    
                 else:
                     return None
             else:
@@ -59,11 +55,28 @@ class Sokosolver(SearchDomain):
 
     # custo de uma accao num estado
     def cost(self, state, next_move):
+        #distanca do keeper 
         return 1
 
     # custo estimado de chegar de um estado a outro
     def heuristic(self, state, goal):
-        pass
+        
+        #i = 0
+        #for s in state.boxes:
+        #    if s in self.goals:
+        #        i += 1
+        #return i
+
+        #é a soma das dsitancias entre as caixas até ao goal mais proximo
+        aux = set()
+        result = 0
+        for box in state.boxes:
+            for goal in self.goals:
+                dist = abs(box[0] - goal[0]) + abs(box[1] - goal[1])
+                aux.add(dist)
+            result += min(aux) 
+        return result
+            
 
     # test if the given "goal" is satisfied in "state"
     def satisfies(self, state, goal):

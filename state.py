@@ -15,5 +15,6 @@ class State():
             return NotImplemented
         return self.boxes == other.boxes and self.keeper == other.keeper
 
-    def hash(self):
-        return hash((self.boxes, self.keeper))
+    def __hash__(self):
+        aux = tuple(self.boxes) #CHANGE THIS
+        return hash((aux, self.keeper))

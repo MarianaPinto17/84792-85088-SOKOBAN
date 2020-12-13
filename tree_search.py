@@ -12,6 +12,8 @@
 #  Introducao a Inteligencia Artificial, 2012-2019,
 #  Inteligência Artificial, 2014-2019
 
+
+
 from abc import ABC, abstractmethod
 import asyncio
 from deadlock import *
@@ -93,12 +95,18 @@ class SearchTree:
         self.non_terminals = 0
 
     # obter o caminho (sequencia de estados) da raiz ate um no
+
     def get_path(self,node):
+        #if node.parent == None:
+        #    return {node.state}
+        #path = self.get_path(node.parent)
+        #path.add(node.state) 
         if node.parent == None:
             return [node.state]
         path = self.get_path(node.parent)
         path += [node.state]
-        return(path)
+
+        return path
     
     def length(self):
         return self.solution.depth
@@ -116,7 +124,7 @@ class SearchTree:
                 self.terminals = len(self.open_nodes)+1
                 self.solution = node
                 print("==================WE HAVE A SOLUTION==================")
-                print(todos_cantos)
+                #print(todos_cantos)
                 todos_cantos.clear()
                 return self.get_path(node)
             self.non_terminals+=1
@@ -124,15 +132,17 @@ class SearchTree:
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
+                
                 if newstate != None:
                     if not node.in_parent(newstate) and (limit is None or newnode.depth <= limit):
                         if newstate not in self.get_path(node):
                             newnode = SearchNode(newstate,node)
+                            newnode.heuristic = self.problem.domain.heuristic(newnode.state,self.problem.goal)
                             lnewnodes.append(newnode)
                             #node.children.append(newnode)
             self.add_to_open(lnewnodes)
         print("!!!NO SOLUTION!!!")
-        print(todos_cantos)
+        #print(todos_cantos)
         return None #no solution deteced
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia
@@ -146,11 +156,7 @@ class SearchTree:
             self.open_nodes.sort(key = (lambda x: x.cost))
         elif self.strategy == 'greedy':
             self.open_nodes += lnewnodes
-            for i in range(len(self.open_nodes)):
-                if(self.open_nodes[0]):
-                    temp = self.open_nodes[0]
-                    self.open_nodes[0] = self.open_nodes[i]
-                    self.open_nodes[i] = temp
+            self.open_nodes.sort(key = (lambda x: x.heuristic))
         elif self.strategy == 'astar':
             self.open_nodes = sorted(self.open_nodes + lnewnodes, key = lambda node: node.heuristic + node.cost)
 

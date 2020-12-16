@@ -68,8 +68,9 @@ class SearchNode:
     def __init__(self,state,parent,cost=0): 
         self.state = state
         self.parent = parent
+        self.acumulate = set()
         self.cost = cost
-        self.depth = self.parent.depth + 1 if self.parent != None else 0
+        #self.depth = self.parent.depth + 1 if self.parent != None else 0
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -86,13 +87,12 @@ class SearchNode:
 class SearchTree:
 
     # construtor
-    def __init__(self,problem, strategy='breadth'): 
+    def __init__(self,problem, strategy='greedy'): 
         self.problem = problem
         root = SearchNode(problem.initial, None)
         self.open_nodes = [root]
         self.strategy = strategy
-        self.terminals = 0
-        self.non_terminals = 0
+        
 
     # obter o caminho (sequencia de estados) da raiz ate um no
 
@@ -110,39 +110,32 @@ class SearchTree:
     
     def length(self):
         return self.solution.depth
-
-    @property
-    def avg_ramification(self):
-        return (self.terminals + self.non_terminals - 1) / self.non_terminals
-
     # procurar a solucao
     async def search(self,limit=None):
         while self.open_nodes != []:
             await asyncio.sleep(0)
             node = self.open_nodes.pop(0)
+            if node.parent != None:
+                node.acumulate = (node.parent.acumulate)
+                node.acumulate.add(node.state)
+            else:
+                node.acumulate.add(node.state)
             if self.problem.goal_test(node.state): #solution detected
-                self.terminals = len(self.open_nodes)+1
                 self.solution = node
                 print("==================WE HAVE A SOLUTION==================")
-                #print(todos_cantos)
                 todos_cantos.clear()
                 return self.get_path(node)
-            self.non_terminals+=1
-            #node.children = []
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                
+                #print(newstate)
                 if newstate != None:
-                    if not node.in_parent(newstate) and (limit is None or newnode.depth <= limit):
-                        if newstate not in self.get_path(node):
-                            newnode = SearchNode(newstate,node)
-                            newnode.heuristic = self.problem.domain.heuristic(newnode.state,self.problem.goal)
-                            lnewnodes.append(newnode)
-                            #node.children.append(newnode)
+                    if newstate not in node.acumulate: #set que acumula estados
+                        newnode = SearchNode(newstate,node)
+                        newnode.heuristic = self.problem.domain.heuristic(newnode.state,self.problem.goal)
+                        lnewnodes.append(newnode)
             self.add_to_open(lnewnodes)
         print("!!!NO SOLUTION!!!")
-        #print(todos_cantos)
         return None #no solution deteced
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia

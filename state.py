@@ -16,5 +16,5 @@ class State():
         return self.boxes == other.boxes and self.keeper == other.keeper
 
     def __hash__(self):
-        aux = tuple(self.boxes) #CHANGE THIS
+        aux = tuple(self.boxes)
         return hash((aux, self.keeper))

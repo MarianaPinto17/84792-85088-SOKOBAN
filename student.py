@@ -1,30 +1,31 @@
 import asyncio
 import getpass
+import time
 import json
 import os
 import random
 from tree_search import *
 from sokosolver import *
 from state import *
-from agent import translate
 import websockets
 from mapa import Map
 from agent import translate
 
 async def solver(puzzle, solution):
     while True:
+        start = time.time()
         game_properties = await puzzle.get()
         mapa = Map(game_properties["map"])
         print(mapa)
         domain = Sokosolver(mapa)
+        domain.pair() #calculates the pairs atribution for the heuristic
         initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]),mapa.keeper)
         problem = SearchProblem(domain , initstate, mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]))
         st = SearchTree(problem,"greedy")
         lista = await (st.search())
-        #for elem in lista:
-         #   print(elem)
         keys = translate(lista)
-        #keys = "sawdddsawaassdwawdwwasdssddwasaww"
+        end = time.time()
+        print(f"Time spent: {end-start}")
         print(keys)
         await solution.put(keys)
 

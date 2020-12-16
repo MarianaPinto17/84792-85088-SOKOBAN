@@ -19,8 +19,8 @@ async def solver(puzzle, solution):
         print(mapa)
         domain = Sokosolver(mapa)
         domain.pair() #calculates the pairs atribution for the heuristic
-        initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]),mapa.keeper)
-        problem = SearchProblem(domain , initstate, mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]))
+        initstate = State(mapa.filter_tiles([Tiles.BOX]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]),mapa.keeper)
+        problem = SearchProblem(domain , initstate, mapa.filter_tiles([Tiles.GOAL]) + mapa.filter_tiles([Tiles.BOX_ON_GOAL]) + mapa.filter_tiles([Tiles.MAN_ON_GOAL]))
         st = SearchTree(problem,"greedy")
         lista = await (st.search())
         keys = translate(lista)

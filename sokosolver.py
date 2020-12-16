@@ -16,15 +16,6 @@ class Sokosolver(SearchDomain):
         self.deadlock = []#hardcoded deadlocks
 
     def pair(self):
-        # aux = set()
-        # result = set()
-        # for box in self.boxes:
-        #     for goal in self.goals:
-        #         dist = abs(box[0] - goal[0]) + abs(box[1] - goal[1])
-        #         aux.add((dist,box,goal))
-        #     result.add(min(aux))
-        # print(result)
-
         all_pairs = list()
         valid_pairs = list()
         valid_goals = list()
@@ -61,14 +52,13 @@ class Sokosolver(SearchDomain):
         for x in neighbor: #check if keeper is going into a wall
             if x not in self.walls:
                 pstate.add(x)
-
         return pstate
     
     # resultado de uma accao num estado, ou seja, o estado seguinte
     def result(self, state, next_move):
         new_state = State(state.boxes,next_move)
         # if action is go to box I push the box
-        print(f"here {state.boxes}")
+        
         if next_move in state.boxes: #se a açao está em state.boxes
             #keeper coordinates
             (x1,y1) = state.keeper
@@ -90,7 +80,6 @@ class Sokosolver(SearchDomain):
                     return None
             else:
                 return None
-        print(new_state)
         return new_state
 
     # custo de uma accao num estado
@@ -122,10 +111,6 @@ class Sokosolver(SearchDomain):
         #Minimum Matching Lower Bound(GREEDY)
         
         result = 0
-        print(self.pairs)
-        print(self.goals)
-        print(self.boxes)
-        print(state.boxes)
         for i in range(len(state.boxes)):
             result += abs(state.boxes[i][0]-self.pairs[i][0][0]) + abs(state.boxes[i][1]-self.pairs[i][0][1])        
         return result

@@ -33,6 +33,7 @@ class Sokosolver(SearchDomain):
                 valid_boxes.append(x[1])
                 valid_goals.append(x[0])
         
+        #[result.append(y) for x in self.boxes for y in valid_pairs if x ==y[1]]
         for x in self.boxes:
             for y in valid_pairs:
                 if x == y[1]:

@@ -45,7 +45,7 @@ def deadlock_box(box,allboxes,obstacles):
             return True
         else:
             return False
-'''
+
 def isWall(position,x,y,corner,obstacles):
     new_position = position
 
@@ -56,11 +56,10 @@ def isWall(position,x,y,corner,obstacles):
 
     #Enquanto nova posição não é corner
     while new_position != corner:
-        if down in obstacles:
+        if down in obstacles and x>0 and y>0:
             new_position = (new_position[0]+x, new_position[1]+y)        
         else:
             return False
-    
     return True
 
 def deadlock_boxnotgoal(box,goals,obstacles):
@@ -78,8 +77,7 @@ def deadlock_boxnotgoal(box,goals,obstacles):
                 if corner[1] == box[1] and goal[1] != box[1]:
                     isWall(box,1,0,corner,obstacles)
                     isWall(box,-1,0,corner,obstacles)
-                    return True
                 else:
-                    pass
-    return False
-'''
+                    return None
+    else:
+        return False

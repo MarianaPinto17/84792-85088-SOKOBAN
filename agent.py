@@ -1,3 +1,4 @@
+
 from mapa import *
 from tree_search import SearchNode
 
@@ -20,7 +21,3 @@ def translate(solution):#translates the movements of the keeper to a wasd list
             res += 'w'
     return res
 
-
-
-
-    
